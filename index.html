@@ -92,7 +92,7 @@
 
   // Optional Sanity CMS connection. You can leave this empty if using Google Sheets.
   const sanityConfig = {
-    projectId: 'lexxtuk5',
+    projectId: '', // example: 'abc123xyz'
     dataset: 'production',
     apiVersion: '2025-01-01',
     useCdn: true
@@ -123,7 +123,46 @@
   }
   function applyCmsMedia(){
     const settings = cms && cms.settings ? cms.settings : {};
+    const mediaItems = cms && Array.isArray(cms.mediaItems) ? cms.mediaItems : [];
     const videoBox = document.getElementById('mainVideoBox');
+
+    if(mediaItems.length){
+      const video = mediaItems.find(m => (m.mediaType === 'video' || m.videoUrl) && m.videoUrl);
+      if(videoBox){
+        const h3 = videoBox.querySelector('h3');
+        const p = videoBox.querySelector('p');
+        if(video){
+          if(h3) h3.textContent = localized(video.title) || t('videoTitle');
+          if(p) p.textContent = localized(video.description) || t('videoText');
+          videoBox.classList.add('clickable');
+          videoBox.onclick = () => window.open(video.videoUrl, '_blank', 'noopener');
+          videoBox.title = localized(video.title) || t('videoTitle');
+        } else {
+          videoBox.classList.remove('clickable');
+          videoBox.onclick = null;
+        }
+      }
+
+      const images = mediaItems.filter(m => (m.mediaType === 'image' || m.imageUrl) && m.imageUrl).slice(0,4);
+      [1,2,3,4].forEach(n=>{
+        const el = document.getElementById('photo'+n+'Box');
+        if(!el) return;
+        const item = images[n-1];
+        const label = el.querySelector('span');
+        if(item){
+          el.classList.add('has-image');
+          el.style.backgroundImage = `url("${item.imageUrl}")`;
+          if(label) label.textContent = localized(item.title) || t('photo'+n);
+        } else {
+          const url = settings['photo'+n+'ImageUrl'] || '';
+          el.classList.toggle('has-image', !!url);
+          el.style.backgroundImage = url ? `url("${url}")` : '';
+          if(label) label.textContent = t('photo'+n);
+        }
+      });
+      return;
+    }
+
     const videoUrl = settings.videoUrl || settings.mainVideoUrl || '';
     if(videoBox){
       videoBox.classList.toggle('clickable', !!videoUrl);
@@ -226,7 +265,8 @@
     const query = `{
       "settings": *[_type == "siteSettings"][0]{brand, heroTitle, heroLead, safetyText, addressText, hoursText, phone, email, adultNewPortalUrl, childGuardianPortalUrl, followUpPortalUrl, generalContactPortalUrl, staffPortalUrl, "navServices": interfaceText.navServices, "navAppointment": interfaceText.navAppointment, "navBlog": interfaceText.navBlog, "navMedia": interfaceText.navMedia, "navContact": interfaceText.navContact, "menu": interfaceText.menu, "bookNow": interfaceText.bookNow, "eyebrow": interfaceText.eyebrow, "startAppointment": interfaceText.startAppointment, "crisisHelp": interfaceText.crisisHelp, "heroPhoneLabel": interfaceText.heroPhoneLabel, "heroEmailLabel": interfaceText.heroEmailLabel, "safetyTitle": interfaceText.safetyTitle, "pathTitle": interfaceText.pathTitle, "pathLead": interfaceText.pathLead, "path1": interfaceText.path1, "path2": interfaceText.path2, "path3": interfaceText.path3, "pathDone": interfaceText.pathDone, "pathPriority": interfaceText.pathPriority, "pathCare": interfaceText.pathCare, "privacyTitle": interfaceText.privacyTitle, "privacyText": interfaceText.privacyText, "alertTitle": interfaceText.alertTitle, "alertText": interfaceText.alertText, "servicesTag": interfaceText.servicesTag, "servicesTitle": interfaceText.servicesTitle, "servicesLead": interfaceText.servicesLead, "apptTag": interfaceText.apptTag, "apptTitle": interfaceText.apptTitle, "apptLead": interfaceText.apptLead, "officePortal": interfaceText.officePortal, "step1Title": interfaceText.step1Title, "step1Text": interfaceText.step1Text, "step2Title": interfaceText.step2Title, "step2Text": interfaceText.step2Text, "step3Title": interfaceText.step3Title, "step3Text": interfaceText.step3Text, "step4Title": interfaceText.step4Title, "step4Text": interfaceText.step4Text, "secure1Title": interfaceText.secure1Title, "secure1Text": interfaceText.secure1Text, "secure2Title": interfaceText.secure2Title, "secure2Text": interfaceText.secure2Text, "secure3Title": interfaceText.secure3Title, "secure3Text": interfaceText.secure3Text, "secure4Title": interfaceText.secure4Title, "secure4Text": interfaceText.secure4Text, "configureTitle": interfaceText.configureTitle, "configureText": interfaceText.configureText, "adultNewTitle": interfaceText.adultNewTitle, "adultNewText": interfaceText.adultNewText, "childTitle": interfaceText.childTitle, "childText": interfaceText.childText, "followTitle": interfaceText.followTitle, "followText": interfaceText.followText, "contactFormTitle": interfaceText.contactFormTitle, "contactFormText": interfaceText.contactFormText, "openSecureForm": interfaceText.openSecureForm, "blogTag": interfaceText.blogTag, "blogTitle": interfaceText.blogTitle, "blogLead": interfaceText.blogLead, "mediaTag": interfaceText.mediaTag, "mediaTitle": interfaceText.mediaTitle, "contactTag": interfaceText.contactTag, "contactTitle": interfaceText.contactTitle, "contactLead": interfaceText.contactLead, "officeInfo": interfaceText.officeInfo, "phoneLabel": interfaceText.phoneLabel, "emailLabel": interfaceText.emailLabel, "hoursLabel": interfaceText.hoursLabel, "addressLabel": interfaceText.addressLabel, "emergencyLabel": interfaceText.emergencyLabel, "emergencyText": interfaceText.emergencyText, "callNow": interfaceText.callNow, "emailOffice": interfaceText.emailOffice, "mapTitle": interfaceText.mapTitle, "mapText": interfaceText.mapText, "footerText": interfaceText.footerText, "footerLegal": interfaceText.footerLegal, "quickLinks": interfaceText.quickLinks, "portalNeeds": interfaceText.portalNeeds, "need1": interfaceText.need1, "need2": interfaceText.need2, "need3": interfaceText.need3, "chatToggle": interfaceText.chatToggle, "chatTitle": interfaceText.chatTitle, "chatText": interfaceText.chatText, "portalNotReadyTitle": interfaceText.portalNotReadyTitle, "portalNotReadyText": interfaceText.portalNotReadyText, "portalSafetyTitle": interfaceText.portalSafetyTitle, "portalSafetyText": interfaceText.portalSafetyText, "mediaLead": mediaSection.mediaLead, "videoTitle": mediaSection.videoTitle, "videoText": mediaSection.videoText, "photo1": mediaSection.photo1, "photo2": mediaSection.photo2, "photo3": mediaSection.photo3, "photo4": mediaSection.photo4, "videoUrl": mediaSection.videoUrl, "photo1ImageUrl": photo1Image.asset->url, "photo2ImageUrl": photo2Image.asset->url, "photo3ImageUrl": photo3Image.asset->url, "photo4ImageUrl": photo4Image.asset->url, "photo1ImageUrl": mediaSection.photo1Image.asset->url, "photo2ImageUrl": mediaSection.photo2Image.asset->url, "photo3ImageUrl": mediaSection.photo3Image.asset->url, "photo4ImageUrl": mediaSection.photo4Image.asset->url},
       "services": *[_type == "service" && enabled != false] | order(orderRank asc){tag, title, description},
-      "posts": *[_type == "post" && published != false] | order(publishedAt desc){title, excerpt, "imageUrl": mainImage.asset->url, videoUrl, videoLabel}
+      "posts": *[_type == "post" && published != false] | order(publishedAt desc){title, excerpt, "imageUrl": mainImage.asset->url, videoUrl, videoLabel},
+      "mediaItems": *[_type == "mediaItem" && enabled != false] | order(orderRank asc){mediaType, title, description, videoUrl, "imageUrl": image.asset->url}
     }`;
     const base = sanityConfig.useCdn ? 'apicdn' : 'api';
     const url = `https://${sanityConfig.projectId}.${base}.sanity.io/v${sanityConfig.apiVersion}/data/query/${sanityConfig.dataset}?query=${encodeURIComponent(query)}`;
