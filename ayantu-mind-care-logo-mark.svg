@@ -1,0 +1,24 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Ayantu Mind Care icon</title>
+  <desc id="desc">A teal circular icon with a heart, mind pathway, and leaf for Ayantu Mind Care.</desc>
+  <defs>
+    <linearGradient id="teal" x1="92" y1="66" x2="420" y2="448" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0D7C72"/>
+      <stop offset="1" stop-color="#134E4A"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="202" y1="124" x2="330" y2="360" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F1C27D"/>
+      <stop offset="1" stop-color="#D99542"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="132" fill="#F7FBFA"/>
+  <circle cx="256" cy="256" r="190" fill="white"/>
+  <circle cx="256" cy="256" r="165" fill="url(#teal)"/>
+  <path d="M256 108C204 108 164 149 164 201C164 232 180 260 204 278L256 340L308 278C332 260 348 232 348 201C348 149 308 108 256 108Z" fill="white" fill-opacity="0.95"/>
+  <path d="M256 139C222 139 195 166 195 201C195 222 206 241 222 253L256 294L290 253C306 241 317 222 317 201C317 166 290 139 256 139Z" fill="#E8F7F5"/>
+  <path d="M202 238C228 213 257 204 293 209" stroke="#0D7C72" stroke-width="19" stroke-linecap="round"/>
+  <path d="M220 190C238 165 268 157 298 171" stroke="#0D7C72" stroke-width="19" stroke-linecap="round"/>
+  <path d="M257 346C257 286 280 240 324 206" stroke="url(#gold)" stroke-width="19" stroke-linecap="round"/>
+  <path d="M324 206C302 203 283 209 268 222C286 225 307 219 324 206Z" fill="url(#gold)"/>
+  <path d="M242 348C219 312 186 298 147 306C168 330 202 349 242 348Z" fill="#66B7AC"/>
+</svg>
